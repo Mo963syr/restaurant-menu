@@ -23,6 +23,27 @@ export class CategoriesService {
     return this.categoryModel.create(dto);
   }
 
+  async update(id: string, dto: CreateCategoryDto) {
+    const category = await this.categoryModel.findByIdAndUpdate(
+      id,
+      dto,
+      { new: true }
+    );
+
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
+    return category;
+  }
+
+  async delete(id: string) {
+    const category = await this.categoryModel.findByIdAndDelete(id);
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+  }
+
   findByRestaurant(restaurantId: string) {
     return this.categoryModel.find({ restaurant: restaurantId });
   }
