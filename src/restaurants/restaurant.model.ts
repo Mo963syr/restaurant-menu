@@ -14,5 +14,6 @@ import { User, UserSchema } from '../users/user.schema';
   ],
   controllers: [RestaurantsController],
   providers: [RestaurantsService],
+  exports: [MongooseModule, RestaurantsService],
 })
 export class RestaurantsModule {}

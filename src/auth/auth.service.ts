@@ -29,7 +29,7 @@ export class AuthService {
   private async signTokens(payload: JwtPayload) {
     const accessToken = await this.jwt.signAsync(payload, {
       secret: ACCESS_TOKEN_SECRET,
-      expiresIn: '50s', // access token قصير
+      expiresIn: '256s', // access token قصير
     });
 
     const refreshToken = await this.jwt.signAsync(payload, {
