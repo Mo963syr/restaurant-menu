@@ -1,6 +1,7 @@
 export class CreateOrderItemDto {
   productId: string;
   quantity: number;
+  note?: string; // ملاحظة لكل منتج في الطلب
 }
 
 export class CreateOrderDto {

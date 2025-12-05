@@ -1,7 +1,8 @@
-import { Controller, Post, Get, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Post, Get, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { CreateRestaurantDto, UpdateRestaurantDto } from './dto/create-restaurant.dto';
-
+import { JwtAuthGuard } from '../common/jwt-auth.guard';
+@UseGuards(JwtAuthGuard)
 @Controller('restaurants')
 export class RestaurantsController {
   constructor(private service: RestaurantsService) {}
