@@ -68,12 +68,80 @@ export class ProductsService {
     const product = new this.model(dto);
     return product.save();
   }
+async delete(id:string){
+const   product = await this.model.findByIdAndDelete(id);
+if (!product) {
+  throw new BadRequestException('الطبق غير موجود.');
+}}
+//  عرض الأطباق بناءً على المطعم
+  async findByRestaurant(restaurant: string) {
 
-  findByRestaurant(restaurant: string) {
     return this.model.find({ restaurant }).exec();
+
+  }
+  //  عرض الأطباق بناءً على الفئة
+  async findByCategory(category: string, status?: string) {
+  const filter: any = { category };
+
+  // لو بعت status نضيفه للفلتر
+  if (status) {
+    filter.status = status;
   }
 
-  findByCategory(category: string) {
-    return this.model.find({ category }).exec();
+  // لو ما بعت status ممكن تضيف قيمة افتراضية:
+  else {
+    filter.status = 'active';
   }
+
+  return this.model.find(filter).exec();
+}
+
+async update(id: string, dto: CreateProductDto) {
+  // ------------------------------------
+  // 1️⃣ التحقق من صحة الـ ObjectId
+  // ------------------------------------
+  if (!isValidObjectId(id)) {
+    throw new BadRequestException('المعرّف غير صالح.');
+  }
+
+  // ------------------------------------
+  // 2️⃣ التحقق من أن المنتج موجود مسبقاً
+  // ------------------------------------
+  const existingProduct = await this.model.findById(id);
+  if (!existingProduct) {
+    throw new BadRequestException('الطبق غير موجود.');
+  }
+
+
+
+
+  if (dto.status && !['active', 'inactive'].includes(dto.status)) {
+    throw new BadRequestException('الحالة يجب أن تكون active أو inactive فقط.');
+  }
+
+  try {
+    const updated = await this.model.findByIdAndUpdate(id, dto, {
+      new: true,
+      runValidators: true,
+    });
+
+    return updated;
+  } catch (error) {
+    console.error(error);
+
+    // أخطاء Mongoose validation
+    if (error.name === 'ValidationError') {
+      throw new BadRequestException('خطأ في البيانات المرسلة.');
+    }
+
+    // CastError (مثل Category/Restaurant invalid type)
+    if (error.name === 'CastError') {
+      throw new BadRequestException('القيم المرسلة غير صالحة.');
+    }
+
+    throw new BadRequestException('حدث خطأ غير متوقع.');
+  }
+}
+
+
 }

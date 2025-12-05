@@ -15,7 +15,7 @@ export class Product extends Document {
   @Prop()
   image: string;
 
-  @Prop({ default: 'active', enum: ['active', 'inactive'] })
+  @Prop({ default: 'active',   enum: ['active', 'inactive'] })
   status: string;
 
   @Prop({ type: Types.ObjectId, ref: 'Category', required: true })
