@@ -10,5 +10,6 @@ import { TablesService } from './tables.service';
   ],
   controllers: [TablesController],
   providers: [TablesService],
+   exports: [MongooseModule],
 })
 export class TablesModule {}

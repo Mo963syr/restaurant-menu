@@ -1,7 +1,11 @@
-import { Controller, Post, Get, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, Put, Delete, UseGuards } from '@nestjs/common';
 import { TablesService } from './tables.service';
 import { CreateTableDto } from './dto/create-table.dto';
+import { CreateTablesBulkDto } from './dto/create-tables-bulk.dto';
+import { JwtAuthGuard } from '../common/jwt-auth.guard';
 
+
+@UseGuards(JwtAuthGuard)
 @Controller('tables')
 export class TablesController {
   constructor(private service: TablesService) {}
@@ -10,6 +14,11 @@ export class TablesController {
   create(@Body() dto: CreateTableDto) {
     return this.service.create(dto);
   }
+
+  @Post('bulk')
+createBulk(@Body() dto: CreateTablesBulkDto) {
+  return this.service.createMultiple(dto);
+}
 
   @Get('restaurant/:id')
   findAllByRestaurant(@Param('id') restaurantId: string) {

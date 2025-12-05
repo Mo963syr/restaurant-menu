@@ -7,10 +7,13 @@ export class Table extends Document {
   @Prop({ required: true })
   number: number; // رقم الطاولة
 
-  @Prop({ required: true })
+  @Prop({ })
   seats: number; // عدد الكراسي
 
-  @Prop({ type: String, ref: 'Restaurant', required: true })
+   @Prop({ default: 'active' })
+  status: string;
+
+  @Prop({ type: String, ref: 'Restaurant' })
   restaurant: string;
 }
 

@@ -29,7 +29,7 @@ export class AuthService {
   private async signTokens(payload: JwtPayload) {
     const accessToken = await this.jwt.signAsync(payload, {
       secret: ACCESS_TOKEN_SECRET,
-      expiresIn: '256s', // access token قصير
+      expiresIn: '2d', 
     });
 
     const refreshToken = await this.jwt.signAsync(payload, {
@@ -89,7 +89,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    // (اختياري لكن أفضل) نتأكد أن المستخدم ما زال موجوداً
+  
     const user = await this.userModel.findById(payload.sub);
     if (!user) {
       throw new UnauthorizedException('User no longer exists');
