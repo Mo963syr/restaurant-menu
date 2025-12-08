@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 import { UsersModule } from './users/users.module';
 import { RestaurantsModule } from './restaurants/restaurant.model';
@@ -8,12 +9,21 @@ import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { AuthModule } from './auth/auth.module';
-  import { PaymentsModule } from './Payment/payments.module';
+import { PaymentsModule } from './Payment/payments.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/restaurant-menu'),
+    // تحميل متغيرات البيئة من .env وجعلها متاحة في كل المشروع
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
 
+    // الاتصال بقاعدة البيانات
+    MongooseModule.forRoot(
+      process.env.MONGO_URI || 'mongodb+srv://menuapp:qr7aXaG8rfSA1ERo@menuapp.mggtsul.mongodb.net/menuapp?retryWrites=true&w=majority&appName=menuapp',
+    ),
+
+    // بقية الموديولات
     UsersModule,
     RestaurantsModule,
     TablesModule,
@@ -21,14 +31,9 @@ import { AuthModule } from './auth/auth.module';
     ProductsModule,
     OrdersModule,
     AuthModule,
-    PaymentsModule
+    PaymentsModule,
   ],
-  exports: [  MongooseModule ,UsersModule],
+  // غالباً لا تحتاج تصدير MongooseModule هنا، إلا لو عندك سبب معين
+  exports: [UsersModule],
 })
 export class AppModule {}
-
-    
-    
-    
-    
-    
