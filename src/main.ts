@@ -6,19 +6,14 @@ import helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // middlewares
+  // Middlewares
   app.use(cookieParser());  // لقراءة الكوكيز
   app.use(helmet());        // هيدرات حماية أساسية
 
-  // CORS
-  // ضع في الـ env مثلاً:
-  // ALLOWED_ORIGINS=http://localhost:3000,https://my-frontend.com
-  const allowedOrigins =
-    process.env.ALLOWED_ORIGINS?.split(',') ?? ['http://localhost:3000'];
-
+  // CORS: السماح لجميع الدومينات بالوصول
   app.enableCors({
-    origin: allowedOrigins,
-    credentials: true, // ضروري للكوكيز (refresh token)
+    origin: '*',        // السماح للجميع بالوصول
+    credentials: true,   // يسمح بإرسال الكوكيز (مثل refresh token)
   });
 
   // Render يمرر PORT في env
