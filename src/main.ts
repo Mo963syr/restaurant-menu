@@ -10,6 +10,7 @@ async function bootstrap() {
   app.use(cookieParser());  // لقراءة الكوكيز
   app.use(helmet());        // هيدرات حماية أساسية
 
+  
   // CORS: السماح لجميع الدومينات بالوصول
   app.enableCors({
     origin: '*',        // السماح للجميع بالوصول
